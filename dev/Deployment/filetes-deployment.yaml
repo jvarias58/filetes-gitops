@@ -17,6 +17,7 @@ spec:
       containers:
       - name: filetes
         image: pti06/filetes:latest
+        imagePullPolicy: Always
         # ports:
         #- containerPort: 8081
         volumeMounts:
