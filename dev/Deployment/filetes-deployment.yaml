@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filetes
+  labels:
+    app: filetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filetes
+  template:
+    metadata:
+      labels:
+        app: filetes
+    spec:
+      containers:
+      - name: filetes
+        image: pti06/filetes:latest
+        # ports:
+        #- containerPort: 8081
+        volumeMounts:
+        - name: uploads
+          mountPath: /data/uploads
+        env:
+          - name: INSIDE_CLUSTER
+            value: "true"
+          - name: PORT
+            value: "8081"
+          - name: BLOCKCHAIN_URL
+            value: "https://sepolia.infura.io/v3/"
+          - name: FILE_CONTRACT
+            valueFrom:
+              secretKeyRef:
+                name: file-contract
+                key: file-contract 
+          - name: PKEY_CONTRACT
+            valueFrom:
+              secretKeyRef:
+                name: pkey-contract
+                key: pkey-contract
+          - name: SECRET_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: secret-token
+                key: secret-token
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-user
+                key: mongo-user
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-pass
+                key: mongo-pass
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: uploads-claim

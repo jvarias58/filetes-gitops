@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: upload-pv
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadOnlyMany
+  capacity:
+    storage: 200Mi
+  claimRef:
+    kind: PersistentVolumeClaim
+    name: uploads-claim
+    namespace: default
+  hostPath:
+    path: /mnt/uploads
+    type: ""
+  persistentVolumeReclaimPolicy: Retain
